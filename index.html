@@ -198,7 +198,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;text-align:center;color:v
     <div class="join">
       <h2>كن جزءاً من النشامى</h2>
       <p class="sub">سجّل عضويتك الآن وتابعنا على منصاتنا.</p>
-      <a class="btn primary" href="https://forms.gle/aEoAeTE8PZJy5n7s9" target="_blank" rel="noopener">رابط الانتساب للعضوية</a>
+      <a class="btn primary" href="https://forms.gle/aEoAeTE8PZJy5n7s9" target="_blank" rel="noopener">انتسب الآن</a>
       <div class="social">
         <a class="btn" href="https://www.instagram.com/nashama_alyarmouk?dlrf=MXI0NGR6N2s0aXE1dQ==" target="_blank" rel="noopener">📸 انستغرام</a>
         <a class="btn" href="https://www.facebook.com/share/1CX5vPsoa4/?mibextid=wwXIfr" target="_blank" rel="noopener">👍 فيسبوك</a>
@@ -212,21 +212,28 @@ footer{border-top:1px solid var(--line);padding:26px 0;text-align:center;color:v
 <script>
 setTimeout(function(){document.getElementById('intro').classList.add('hide')},2600);
 var rows=document.getElementById('rows');
-var grades=[['A (4.00)',4],['A- (3.67)',3.67],['B+ (3.33)',3.33],['B (3.00)',3],['B- (2.67)',2.67],['C+ (2.33)',2.33],['C (2.00)',2],['C- (1.67)',1.67],['D+ (1.33)',1.33],['D (1.00)',1],['F (0.00)',0]];
+
 function addRow(){
   var d=document.createElement('div');d.className='row';
-  d.innerHTML='<input placeholder="اسم المادة"><input type="number" min="1" max="6" value="3"><select>'+grades.map(function(g){return '<option value="'+g[1]+'">'+g[0]+'</option>'}).join('')+'</select><button class="x" aria-label="حذف">×</button>';
+  // تم استبدال القائمة المنسدلة (select) بمربع إدخال (input) للعلامة المئوية
+  d.innerHTML='<input placeholder="اسم المادة"><input type="number" min="1" max="6" value="3" title="الساعات المعتمدة"><input type="number" min="35" max="100" placeholder="العلامة" title="العلامة من 100"><button class="x" aria-label="حذف">×</button>';
   d.querySelector('.x').onclick=function(){d.remove()};
   rows.appendChild(d);
 }
+
 for(var i=0;i<4;i++)addRow();
 document.getElementById('add').onclick=addRow;
+
 document.getElementById('calc').onclick=function(){
   var pts=0,h=0;
   rows.querySelectorAll('.row').forEach(function(r){
-    var hr=parseFloat(r.children[1].value)||0,g=parseFloat(r.children[2].value)||0;pts+=hr*g;h+=hr;
+    var hr=parseFloat(r.children[1].value)||0;
+    var g=parseFloat(r.children[2].value)||0; // قراءة العلامة المئوية
+    pts += hr * g; 
+    h += hr;
   });
-  document.getElementById('gpa').textContent=h?(pts/h).toFixed(2):'0.00';
+  // حساب وعرض المعدل المئوي النهائي
+  document.getElementById('gpa').textContent=h?(pts/h).toFixed(2) + '%':'0.00%';
   document.getElementById('hrs').textContent='إجمالي الساعات: '+h;
   document.getElementById('res').hidden=false;
 };
